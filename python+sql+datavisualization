@@ -1,0 +1,60 @@
+import sqlite3
+import matplotlib.pyplot as plt
+
+# Create database
+conn = sqlite3.connect("students.db")
+cursor = conn.cursor()
+
+# Create table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS students (
+    name TEXT,
+    marks INTEGER
+)
+""")
+
+# Insert student data
+students = [
+    ("Bhagya", 85),
+    ("Asha", 72),
+    ("Rahul", 91),
+    ("Sneha", 68),
+    ("Kiran", 88)
+]
+
+cursor.execute("DELETE FROM students")
+cursor.executemany(
+    "INSERT INTO students VALUES (?, ?)", students
+)
+conn.commit()
+
+# Fetch data
+cursor.execute("SELECT name, marks FROM students")
+data = cursor.fetchall()
+
+# Display results
+print("Student Marks:")
+for name, marks in data:
+    print(name, "-", marks)
+
+# Find average
+cursor.execute("SELECT AVG(marks) FROM students")
+average = cursor.fetchone()[0]
+print("Average Marks:", round(average, 2))
+
+# Find highest marks
+cursor.execute("SELECT MAX(marks) FROM students")
+highest = cursor.fetchone()[0]
+print("Highest Marks:", highest)
+
+# Visualization
+names = [row[0] for row in data]
+marks = [row[1] for row in data]
+
+plt.bar(names, marks)
+plt.xlabel("Students")
+plt.ylabel("Marks")
+plt.title("Student Marks Analysis")
+plt.show()
+
+conn.close()
