@@ -1,0 +1,29 @@
+students = {
+    "Asha": 85,
+    "Rahul": 72,
+    "Priya": 91,
+    "Kiran": 68,
+    "Sneha": 88
+}
+
+total = 0
+highest = 0
+top_student = ""
+
+for name, marks in students.items():
+    total += marks
+
+    if marks > highest:
+        highest = marks
+        top_student = name
+
+average = total / len(students)
+
+print("Student Marks")
+print("-" * 20)
+
+for name, marks in students.items():
+    if marks >= 40:
+        print(name, marks, "Pass")
+    else:
+        print(name, marks, "Fail")
